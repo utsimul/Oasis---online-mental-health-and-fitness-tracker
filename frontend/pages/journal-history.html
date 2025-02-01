@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal History - Wellness Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="journal-history.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Journal History</h1>
+            <nav>
+                <button id="backToMainBtn">Back to Wellness Tracker</button>
+            </nav>
+        </header>
+
+        <main>
+            <section id="journalHistorySection" class="active-section">
+                <h2>Your Journal Entries</h2>
+                <div id="journalEntries" class="journal-history-container">
+                    <!-- Journal entries will be dynamically populated here -->
+                </div>
+                <div class="journal-history-controls">
+                    <button id="deleteAllEntriesBtn">Delete All Entries</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Wellness Tracker. Your personal health companion.</p>
+        </footer>
+    </div>
+</body>
+</html>

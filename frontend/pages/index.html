@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="app.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Wellness Tracker</h1>
+            <nav>
+                <button id="journalBtn">Journal</button>
+                <button id="dietBtn">Diet Plan</button>
+                <button id="healthBtn">Health Metrics</button>
+                <button id="statsBtn">Stats</button>
+            </nav>
+        </header>
+
+        <main>
+            <section id="journalSection" class="active-section">
+                <h2>Personal Journal</h2>
+                <form id="journalForm">
+                    <textarea id="journalInput" placeholder="Write your thoughts..."></textarea>
+                    <div class="journal-actions">
+                        <button type="submit">Save Entry</button>
+                        <button type="button" id="viewJournalHistoryBtn">View Journal History</button>
+                    </div>
+                </form>
+            </section>
+
+            <section id="dietSection">
+                <h2>Diet Planner</h2>
+                <div id="mealTracker">
+                    <div class="meal-category" data-category="breakfast">
+                        <h3>Breakfast</h3>
+                        <ul id="breakfastList"></ul>
+                    </div>
+                    <div class="meal-category" data-category="lunch">
+                        <h3>Lunch</h3>
+                        <ul id="lunchList"></ul>
+                    </div>
+                    <div class="meal-category" data-category="dinner">
+                        <h3>Dinner</h3>
+                        <ul id="dinnerList"></ul>
+                    </div>
+                </div>
+                <form id="foodForm">
+                    <select id="mealType">
+                        <option value="breakfast">Breakfast</option>
+                        <option value="lunch">Lunch</option>
+                        <option value="dinner">Dinner</option>
+                    </select>
+                    <input type="text" id="foodInput" placeholder="Enter food item">
+                    <input type="number" id="caloriesInput" placeholder="Calories">
+                    <button type="submit">Add Food</button>
+                </form>
+            </section>
+
+            <section id="healthSection">
+                <h2>Health Metrics</h2>
+                <div id="metricsTracker">
+                    <div class="metric">
+                        <label for="weightInput">Weight (lbs)</label>
+                        <input type="number" id="weightInput">
+                    </div>
+                    <div class="metric">
+                        <label for="stepsInput">Daily Steps</label>
+                        <input type="number" id="stepsInput">
+                    </div>
+                    <div class="metric">
+                        <label for="sleepInput">Sleep Hours</label>
+                        <input type="number" id="sleepInput">
+                    </div>
+                    <button id="saveMetricsBtn">Save Metrics</button>
+                </div>
+            </section>
+
+            <section id="statsSection">
+                <h2>Health & Nutrition Stats</h2>
+                <div id="nutrientStats">
+                    <h3>Nutrient Intake</h3>
+                    <div class="chart-container">
+                        <canvas id="nutrientChart"></canvas>
+                    </div>
+                    <div class="nutrient-details">
+                        <div class="nutrient-summary">
+                            <h4>Daily Recommended Intake</h4>
+                            <table id="recommendedIntakeTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nutrient</th>
+                                        <th>Recommended</th>
+                                        <th>Current</th>
+                                        <th>% Achieved</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="nutrientIntakeBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="mentalHealthStats">
+                    <h3>Mental Health Insights</h3>
+                    <div class="mental-health-grid">
+                        <div class="mental-health-card" id="stressLevelCard">
+                            <h4>Stress Level</h4>
+                            <div id="stressLevelChart"></div>
+                        </div>
+                        <div class="mental-health-card" id="moodTrackerCard">
+                            <h4>Mood Tracker</h4>
+                            <div id="moodChart"></div>
+                        </div>
+                        <div class="mental-health-card" id="sleepQualityCard">
+                            <h4>Sleep Quality</h4>
+                            <div id="sleepQualityChart"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="progressTracking">
+                    <h3>Weekly Progress</h3>
+                    <div class="progress-grid">
+                        <div class="progress-card">
+                            <h4>Nutrition Score</h4>
+                            <div id="nutritionProgressChart"></div>
+                        </div>
+                        <div class="progress-card">
+                            <h4>Exercise Intensity</h4>
+                            <div id="exerciseProgressChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Wellness Tracker. Your personal health companion.</p>
+        </footer>
+    </div>
+</body>
+</html>
