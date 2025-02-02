@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="mood-tracker.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-back">
+                <button id="backToMainBtn"><i class="fas fa-arrow-left"></i> Back to Wellness Tracker</button>
+            </div>
+            <h1>Mood Tracker</h1>
+        </header>
+
+        <main>
+            <section id="moodTrackerSection" class="active-section">
+                <div class="view-controls">
+                    <button class="view-btn active" data-view="weekly">Weekly</button>
+                    <button class="view-btn" data-view="monthly">Monthly</button>
+                    <button class="view-btn" data-view="yearly">Yearly</button>
+                </div>
+
+                <div class="mood-metrics">
+                    <div class="mood-metric-card">
+                        <h3>Happiness Level</h3>
+                        <canvas id="happinessChart"></canvas>
+                    </div>
+                    <div class="mood-metric-card">
+                        <h3>Dissociation Level</h3>
+                        <canvas id="dissociationChart"></canvas>
+                    </div>
+                    <div class="mood-metric-card">
+                        <h3>Anxiety Level</h3>
+                        <canvas id="anxietyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="entry-form">
+                    <h3>Add New Mood Entry</h3>
+                    <form id="moodEntryForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="happinessLevel">Happiness Level (0-10):</label>
+                                <input type="range" id="happinessLevel" min="0" max="10" step="0.1">
+                                <span class="value-display" id="happinessValue">5.0</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="dissociationLevel">Dissociation Level (0-10):</label>
+                                <input type="range" id="dissociationLevel" min="0" max="10" step="0.1">
+                                <span class="value-display" id="dissociationValue">5.0</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="anxietyLevel">Anxiety Level (0-10):</label>
+                                <input type="range" id="anxietyLevel" min="0" max="10" step="0.1">
+                                <span class="value-display" id="anxietyValue">5.0</span>
+                            </div>
+                        </div>
+
+                        <div class="attack-section">
+                            <h4>Episode Record</h4>
+                            <div class="attack-options">
+                                <label>
+                                    <input type="checkbox" name="attackType" value="panic"> Panic Attack
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="attackType" value="anxiety"> Anxiety Attack
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="attackType" value="anger"> Anger Episode
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="triggers">Triggers (separate with commas):</label>
+                                <textarea id="triggers" rows="2"></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit">Save Entry</button>
+                    </form>
+                </div>
+
+                <div id="moodEntries" class="entries-list">
+                    <h3>Recent Entries</h3>
+                    <!-- Entries will be populated here -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Wellness Tracker. Your personal health companion.</p>
+        </footer>
+    </div>
+</body>
+</html>

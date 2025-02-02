@@ -3,6 +3,8 @@ class WellnessTracker {
         this.initEventListeners();
         this.loadData();
         this.initCharts();
+        this.initFoodTracking();
+        this.updateNutrientComparison();
     }
 
     initEventListeners() {
@@ -26,6 +28,44 @@ class WellnessTracker {
         if (viewJournalHistoryBtn) {
             viewJournalHistoryBtn.addEventListener('click', () => {
                 window.location.href = 'journal-history.html';
+            });
+        }
+
+        // Mental Health Card Navigation
+        const stressLevelCard = document.getElementById('stressLevelCard');
+        const moodTrackerCard = document.getElementById('moodTrackerCard');
+        const sleepQualityCard = document.getElementById('sleepQualityCard');
+
+        if (stressLevelCard) {
+            stressLevelCard.addEventListener('click', () => {
+                window.location.href = 'stress-level.html';
+            });
+        }
+
+        if (moodTrackerCard) {
+            moodTrackerCard.addEventListener('click', () => {
+                window.location.href = 'mood-tracker.html';
+            });
+        }
+
+        if (sleepQualityCard) {
+            sleepQualityCard.addEventListener('click', () => {
+                window.location.href = 'sleep-quality.html';
+            });
+        }
+
+        // Add event listeners for nutrition and exercise cards
+        const nutritionScoreCard = document.querySelector('.progress-card:nth-child(1)');
+        if (nutritionScoreCard) {
+            nutritionScoreCard.addEventListener('click', () => {
+                window.location.href = 'nutrition-score.html';
+            });
+        }
+
+        const exerciseIntensityCard = document.querySelector('.progress-card:nth-child(2)');
+        if (exerciseIntensityCard) {
+            exerciseIntensityCard.addEventListener('click', () => {
+                window.location.href = 'exercise-intensity.html';
             });
         }
     }
@@ -259,6 +299,77 @@ class WellnessTracker {
             },
             options: { responsive: true }
         });
+    }
+
+    initFoodTracking() {
+        const foodEntryForm = document.createElement('div');
+        foodEntryForm.classList.add('food-entry-form');
+        foodEntryForm.innerHTML = `
+            <h3>Add Food Entry</h3>
+            <form id="nutrientEntryForm">
+              <input type="text" id="foodName" placeholder="Food name" required>
+              <input type="number" id="calories" placeholder="Calories" required>
+              <button type="submit">Add Food</button>
+            </form>
+        `;
+
+        const nutrientStats = document.getElementById('nutrientStats');
+        nutrientStats.insertBefore(foodEntryForm, nutrientStats.firstChild);
+
+        document.getElementById('nutrientEntryForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.saveFoodEntry();
+        });
+    }
+
+    saveFoodEntry() {
+        const entry = {
+            name: document.getElementById('foodName').value,
+            calories: parseInt(document.getElementById('calories').value),
+            date: new Date().toISOString()
+        };
+
+        let foodEntries = JSON.parse(localStorage.getItem('foodEntries') || '[]');
+        foodEntries.push(entry);
+        localStorage.setItem('foodEntries', JSON.stringify(foodEntries));
+
+        // Reset form
+        document.getElementById('nutrientEntryForm').reset();
+        this.updateNutrientComparison();
+    }
+
+    updateNutrientComparison() {
+        const foodEntries = JSON.parse(localStorage.getItem('foodEntries') || '[]');
+        const today = new Date().toISOString().split('T')[0];
+        
+        const todayEntries = foodEntries.filter(entry => 
+            entry.date.split('T')[0] === today
+        );
+
+        const currentCalories = todayEntries.reduce((sum, entry) => sum + entry.calories, 0);
+        const recommendedCalories = 2000; // Example value, can be customized
+
+        const comparisonDiv = document.createElement('div');
+        comparisonDiv.classList.add('nutrient-comparison');
+        comparisonDiv.innerHTML = `
+            <div class="intake-card recommended">
+              <h4>Recommended Daily Intake</h4>
+              <p>${recommendedCalories} calories</p>
+            </div>
+            <div class="intake-card current">
+              <h4>Current Daily Intake</h4>
+              <p>${currentCalories} calories</p>
+              <p>(${Math.round((currentCalories/recommendedCalories) * 100)}% of recommended)</p>
+            </div>
+        `;
+
+        const nutrientStats = document.getElementById('nutrientStats');
+        const existingComparison = nutrientStats.querySelector('.nutrient-comparison');
+        if (existingComparison) {
+            nutrientStats.replaceChild(comparisonDiv, existingComparison);
+        } else {
+            nutrientStats.insertBefore(comparisonDiv, nutrientStats.children[1]);
+        }
     }
 }
 

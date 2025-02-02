@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Intensity Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="exercise-intensity.js" defer></script>
+    <style>
+      #intensity {
+        -webkit-appearance: none;
+        background: linear-gradient(to right, #ffab91 0%, #ffab91 50%, #e0e0e0 50%, #e0e0e0 100%);
+        height: 10px;
+        border-radius: 5px;
+        outline: none;
+      }
+      #intensity::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #ff8a80;
+        cursor: pointer;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-back">
+                <button id="backToMainBtn"><i class="fas fa-arrow-left"></i> Back to Wellness Tracker</button>
+            </div>
+            <h1>Exercise Intensity Tracker</h1>
+        </header>
+
+        <main>
+            <section id="exerciseSection" class="active-section">
+                <div id="exerciseStatus" class="status-card">
+                    <h2>Exercise Overview</h2>
+                    <div id="exerciseIndicator"></div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="exerciseChart"></canvas>
+                </div>
+
+                <div class="entry-form">
+                    <h3>Add New Exercise Entry</h3>
+                    <form id="exerciseEntryForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="exerciseType">Exercise Type:</label>
+                                <select id="exerciseType" required>
+                                    <option value="cardio">Cardio</option>
+                                    <option value="strength">Strength Training</option>
+                                    <option value="flexibility">Flexibility</option>
+                                    <option value="hiit">HIIT</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="duration">Duration (minutes):</label>
+                                <input type="number" id="duration" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="intensity">Intensity (1-10):</label>
+                                <input type="range" id="intensity" min="1" max="10" step="1">
+                                <span id="intensityValue">5</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="caloriesBurned">Calories Burned:</label>
+                                <input type="number" id="caloriesBurned" min="0">
+                            </div>
+                        </div>
+                        <button type="submit">Save Entry</button>
+                    </form>
+                </div>
+
+                <div id="exerciseEntries" class="entries-list">
+                    <h3>Today's Exercise Entries</h3>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Wellness Tracker. Your personal health companion.</p>
+        </footer>
+    </div>
+</body>
+</html>

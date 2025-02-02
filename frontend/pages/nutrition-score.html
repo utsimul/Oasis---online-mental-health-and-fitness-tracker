@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Score Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="nutrition-score.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-back">
+                <button id="backToMainBtn"><i class="fas fa-arrow-left"></i> Back to Wellness Tracker</button>
+            </div>
+            <h1>Nutrition Score Tracker</h1>
+        </header>
+
+        <main>
+            <section id="nutritionSection" class="active-section">
+                <div id="nutritionStatus" class="status-card">
+                    <h2>Nutrition Overview</h2>
+                    <div id="nutritionIndicator"></div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="nutritionChart"></canvas>
+                </div>
+
+                <div class="entry-form">
+                    <h3>Add New Food Entry</h3>
+                    <form id="nutritionEntryForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="foodName">Food Item:</label>
+                                <input type="text" id="foodName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="calories">Calories:</label>
+                                <input type="number" id="calories" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="protein">Protein (g):</label>
+                                <input type="number" id="protein" min="0" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label for="carbs">Carbohydrates (g):</label>
+                                <input type="number" id="carbs" min="0" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label for="fats">Fats (g):</label>
+                                <input type="number" id="fats" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <button type="submit">Save Entry</button>
+                    </form>
+                </div>
+
+                <div id="nutritionEntries" class="entries-list">
+                    <h3>Today's Food Entries</h3>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Wellness Tracker. Your personal health companion.</p>
+        </footer>
+    </div>
+</body>
+</html>
