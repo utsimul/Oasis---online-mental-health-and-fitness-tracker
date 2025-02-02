@@ -41,15 +41,29 @@ class WellnessTracker {
         const journalInput = document.getElementById('journalInput');
         const entry = {
             text: journalInput.value,
-            date: new Date().toLocaleString()
+            date: new Date().toISOString()
         };
 
         let entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
         entries.push(entry);
         localStorage.setItem('journalEntries', JSON.stringify(entries));
 
-        this.renderJournalEntries();
+        // Clear the input after saving
         journalInput.value = '';
+        
+        // Optional: Show a success message
+        const successMessage = document.createElement('div');
+        successMessage.textContent = 'Entry saved successfully!';
+        successMessage.style.color = 'green';
+        successMessage.style.marginTop = '10px';
+        journalInput.parentNode.appendChild(successMessage);
+        
+        // Remove the success message after 2 seconds
+        setTimeout(() => {
+            successMessage.remove();
+        }, 2000);
+
+        this.renderJournalEntries();
     }
 
     renderJournalEntries() {
@@ -165,6 +179,7 @@ class WellnessTracker {
 
         // Update nutrient intake table
         const tableBody = document.getElementById('nutrientIntakeBody');
+        tableBody.innerHTML = '';
         nutrients.forEach(nutrient => {
             const percentage = ((nutrient.current / nutrient.recommended) * 100).toFixed(1);
             const row = `

@@ -304,13 +304,75 @@ button:hover {
     padding: 15px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .journal-history-entry .journal-entry-content {
     flex-grow: 1;
     margin-right: 15px;
+}
+
+.journal-history-entry .entry-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-entry-btn, .delete-entry-btn {
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.edit-entry-btn {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.edit-entry-btn:hover {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+}
+
+.edit-mode textarea {
+    width: 100%;
+    min-height: 100px;
+    margin: 10px 0;
+    padding: 10px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.edit-mode .edit-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.save-edit-btn, .cancel-edit-btn {
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.save-edit-btn {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.cancel-edit-btn {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.save-edit-btn:hover, .cancel-edit-btn:hover {
+    transform: translateY(-2px);
 }
 
 .journal-history-entry p {
@@ -320,11 +382,6 @@ button:hover {
 .delete-entry-btn {
     background-color: #ff6b6b;
     color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
 .delete-entry-btn:hover {
@@ -332,11 +389,23 @@ button:hover {
 }
 
 .journal-history-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
     margin-top: 20px;
+}
+
+.journal-history-controls .calendar-container, 
+.journal-history-controls #selectedDateDisplay,
+.journal-history-controls #deleteAllEntriesBtn {
+    width: 100%;
+    max-width: 400px;
     text-align: center;
 }
 
 #deleteAllEntriesBtn {
+    margin-top: 10px;
     background-color: #ff4757;
     color: white;
 }

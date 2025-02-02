@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Journal History - Wellness Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="journal-history.js" defer></script>
 </head>
 <body>
@@ -19,11 +23,21 @@
         <main>
             <section id="journalHistorySection" class="active-section">
                 <h2>Your Journal Entries</h2>
+                
+                <div class="journal-history-controls">
+                    <div class="calendar-container">
+                        <input type="text" id="journalDatePicker" placeholder="Select Date">
+                    </div>
+
+                    <div id="selectedDateDisplay">
+                        <h3>Entries for <span id="currentDateDisplay"></span></h3>
+                    </div>
+
+                    <button id="deleteAllEntriesBtn">Delete All Entries</button>
+                </div>
+
                 <div id="journalEntries" class="journal-history-container">
                     <!-- Journal entries will be dynamically populated here -->
-                </div>
-                <div class="journal-history-controls">
-                    <button id="deleteAllEntriesBtn">Delete All Entries</button>
                 </div>
             </section>
         </main>
