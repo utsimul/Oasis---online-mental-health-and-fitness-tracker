@@ -77,8 +77,8 @@ header h1 {
 }
 
 .auth-btn {
-    background-color: transparent;
-    color: white;
+    background-color: rgba(211, 143, 187, 0.7);
+    color: rgb(0, 0, 0);
     border: 2px solid rgba(255, 255, 255, 0.3);
     padding: 8px 20px;
     border-radius: 20px;
@@ -467,6 +467,7 @@ button:hover {
 }
 
 input[type="range"] {
+    appearance: none; 
   -webkit-appearance: none;
   width: 100%;
   height: 10px;
