@@ -390,7 +390,14 @@ class WellnessTracker {
   }
 }
 
+
 // Initialize the app
-document.addEventListener('DOMContentLoaded', () => {
-  new WellnessTracker();
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+      const response = await fetch("http://localhost:5001/api/users");
+      const users = await response.json();
+      console.log(users); // Log users to check response
+  } catch (error) {
+      console.error("Error fetching users:", error);
+  }
 });
