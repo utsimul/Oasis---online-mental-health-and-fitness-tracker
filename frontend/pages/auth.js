@@ -1,5 +1,6 @@
 class AuthManager {
   constructor() {
+    this.API_BASE_URL = "http://localhost:5001/api";
     this.initializeEventListeners();
   }
 
@@ -17,65 +18,109 @@ class AuthManager {
 
   async handleSignIn(event) {
     event.preventDefault();
-    const email = document.getElementById("email").value;
+    const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
 
     try {
-      const response = await fetch("http://localhost:5001/api/auth/login", {
+      console.log("Attempting login with:", { email });
+      
+      const response = await fetch(`${this.API_BASE_URL}/auth/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
         body: JSON.stringify({ email, password }),
       });
 
       const result = await response.json();
+      console.log("Login response:", result);
+
       if (response.ok) {
+        localStorage.setItem("authToken", result.token);
         localStorage.setItem("currentUser", JSON.stringify(result.user));
         window.location.href = "index.html";
       } else {
-        this.showError(result.message || "Invalid email or password", "signInForm");
+        this.showError(result.message || "Invalid credentials", "signInForm");
       }
     } catch (error) {
       console.error("Login error:", error);
-      this.showError("An error occurred while signing in", "signInForm");
+      this.showError("Network error. Please try again.", "signInForm");
     }
   }
 
   async handleSignUp(event) {
     event.preventDefault();
-    const nickname = document.getElementById("nickname").value;
-    const fullname = document.getElementById("fullname").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+    const userData = {
+      nickname: document.getElementById("nickname").value.trim(),
+      fullname: document.getElementById("fullname").value.trim(),
+      email: document.getElementById("email").value.trim().toLowerCase(),
+      password: document.getElementById("password").value,
+      confirmPassword: document.getElementById("confirmPassword").value
+    };
 
-    if (!this.validatePassword(password)) {
-      this.showError("Password must meet the requirements", "signUpForm");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      this.showError("Passwords do not match", "signUpForm");
-      return;
-    }
+    // Validate inputs
+    if (!this.validateSignUpData(userData)) return;
 
     try {
-      const response = await fetch("http://localhost:5001/api/users", {
+      console.log("Attempting registration with:", userData);
+      
+      const response = await fetch(`${this.API_BASE_URL}/users`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nickname, fullname, email, password }),
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(userData),
       });
 
       const result = await response.json();
+      console.log("Registration response:", result);
+
       if (response.ok) {
-        localStorage.setItem("currentUser", JSON.stringify(result.user));
-        window.location.href = "index.html";
+        this.showSuccess("Account created successfully! Redirecting...", "signUpForm");
+        setTimeout(() => {
+          window.location.href = "signin.html";
+        }, 1500);
       } else {
-        this.showError(result.message || "Signup failed", "signUpForm");
+        this.showError(result.message || "Registration failed. Please try again.", "signUpForm");
       }
     } catch (error) {
       console.error("Signup error:", error);
-      this.showError("An error occurred while creating an account", "signUpForm");
+      this.showError("Network error. Please try again.", "signUpForm");
     }
+  }
+
+  validateSignUpData(data) {
+    // Check required fields
+    if (!data.nickname || !data.fullname || !data.email || !data.password) {
+      this.showError("All fields are required", "signUpForm");
+      return false;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email)) {
+      this.showError("Please enter a valid email address", "signUpForm");
+      return false;
+    }
+
+    // Validate password
+    if (!this.validatePassword(data.password)) {
+      this.showError(
+        "Password must be at least 8 characters with uppercase, lowercase, and number",
+        "signUpForm"
+      );
+      return false;
+    }
+
+    // Check password match
+    if (data.password !== data.confirmPassword) {
+      this.showError("Passwords do not match", "signUpForm");
+      return false;
+    }
+
+    return true;
   }
 
   validatePassword(password) {
@@ -93,29 +138,56 @@ class AuthManager {
     if (!errorDiv) {
       errorDiv = document.createElement("div");
       errorDiv.className = "error-message";
-      form.appendChild(errorDiv);
+      form.prepend(errorDiv); // Add at top of form
     }
 
     errorDiv.textContent = message;
+    errorDiv.style.color = "#ff4444";
+    errorDiv.style.marginBottom = "15px";
     errorDiv.style.display = "block";
 
     setTimeout(() => {
       errorDiv.style.display = "none";
-    }, 3000);
+    }, 5000);
+  }
+
+  showSuccess(message, formId) {
+    const form = document.getElementById(formId);
+    let successDiv = form.querySelector(".success-message");
+
+    if (!successDiv) {
+      successDiv = document.createElement("div");
+      successDiv.className = "success-message";
+      form.prepend(successDiv);
+    }
+
+    successDiv.textContent = message;
+    successDiv.style.color = "#00C851";
+    successDiv.style.marginBottom = "15px";
+    successDiv.style.display = "block";
+
+    setTimeout(() => {
+      successDiv.style.display = "none";
+    }, 5000);
   }
 
   static checkAuth() {
-    const currentUser = localStorage.getItem("currentUser");
-    if (!currentUser && !window.location.href.includes("signin.html") && !window.location.href.includes("signup.html")) {
+    const protectedRoutes = ["index.html", "dashboard.html"]; // Add your protected routes
+    const currentRoute = window.location.pathname.split("/").pop();
+    
+    if (protectedRoutes.includes(currentRoute) && !localStorage.getItem("authToken")) {
       window.location.href = "signin.html";
+    }
+    
+    // If on auth pages but already logged in, redirect to home
+    if (["signin.html", "signup.html"].includes(currentRoute) && localStorage.getItem("authToken")) {
+      window.location.href = "index.html";
     }
   }
 }
 
-// Initialize auth manager
-const authManager = new AuthManager();
-
-// Check authentication status on page load
+// Initialize auth manager when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
+  new AuthManager();
   AuthManager.checkAuth();
 });
