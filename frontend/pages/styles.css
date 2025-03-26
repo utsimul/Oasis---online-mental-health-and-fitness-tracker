@@ -640,3 +640,20 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+.hidden {
+    display: none;
+}
+
+#profileContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#profileIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+}

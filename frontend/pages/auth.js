@@ -181,7 +181,8 @@ class AuthManager {
     
     // If on auth pages but already logged in, redirect to home
     if (["signin.html", "signup.html"].includes(currentRoute) && localStorage.getItem("authToken")) {
-      window.location.href = "index.html";
+      localStorage.setItem('authToken', token);
+      window.location.href = 'index.html';
     }
   }
 }

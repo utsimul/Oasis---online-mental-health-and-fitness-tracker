@@ -1,30 +1,59 @@
 document.addEventListener("DOMContentLoaded", () => {
   class WellnessTracker {
     constructor() {
+      this.authElements = {
+        signInBtn: document.getElementById('signInBtn'),
+        profileContainer: document.getElementById('profileContainer'),
+        profileIcon: document.getElementById('profileIcon'),
+        usernameDisplay: document.getElementById('usernameDisplay')
+      };
+
+      this.initAuthUI(); // Initialize auth UI first
       this.initEventListeners();
       this.loadData();
       this.initCharts();
       this.initFoodTracking();
       this.updateNutrientComparison();
-      this.checkAuth(); // Add authentication check
     }
 
-    checkAuth() {
+    initAuthUI() {
       const currentUser = localStorage.getItem('currentUser');
-      if (!currentUser) {
-        window.location.href = 'signin.html';
+      const authToken = localStorage.getItem('authToken');
+
+      if (currentUser && authToken) {
+        try {
+          const user = JSON.parse(currentUser);
+          this.showProfileIcon(user);
+        } catch (e) {
+          this.showSignInButton();
+        }
+      } else {
+        this.showSignInButton();
       }
     }
 
-    initEventListeners() {
-      document.querySelectorAll('button').forEach(btn => {
-        if (btn.id === 'signInBtn') {
-          btn.addEventListener('click', () => {
-            window.location.href = 'signin.html';
-          });
-        }
+    showProfileIcon(user) {
+      this.authElements.signInBtn.classList.add('hidden');
+      this.authElements.profileContainer.classList.remove('hidden');
+      this.authElements.usernameDisplay.textContent = user.nickname || user.email.split('@')[0];
+      
+      // Add profile dropdown functionality if needed
+      this.authElements.profileIcon.addEventListener('click', () => {
+        // Implement profile dropdown or logout here
+        console.log('Profile clicked', user);
       });
+    }
 
+    showSignInButton() {
+      this.authElements.profileContainer.classList.add('hidden');
+      this.authElements.signInBtn.classList.remove('hidden');
+      
+      this.authElements.signInBtn.addEventListener('click', () => {
+        window.location.href = 'signin.html';
+      });
+    }
+
+    initEventListeners() {
       document.getElementById('journalBtn')?.addEventListener('click', () => this.showSection('journalSection'));
       document.getElementById('dietBtn')?.addEventListener('click', () => this.showSection('dietSection'));
       document.getElementById('healthBtn')?.addEventListener('click', () => this.showSection('healthSection'));
@@ -40,14 +69,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     showSection(sectionId) {
-      document.querySelectorAll('main section').forEach(section => section.classList.remove('active-section'));
+      document.querySelectorAll('main section').forEach(section => {
+        section.classList.remove('active-section');
+      });
       document.getElementById(sectionId)?.classList.add('active-section');
     }
 
     handleJournalSubmit(event) {
       event.preventDefault();
       const journalInput = document.getElementById('journalInput');
-      const entry = { text: journalInput.value, date: new Date().toISOString() };
+      const entry = { 
+        text: journalInput.value, 
+        date: new Date().toISOString(),
+        userId: JSON.parse(localStorage.getItem('currentUser'))?.id 
+      };
+      
       let entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
       entries.push(entry);
       localStorage.setItem('journalEntries', JSON.stringify(entries));
@@ -56,17 +92,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     renderJournalEntries() {
+      const currentUserId = JSON.parse(localStorage.getItem('currentUser'))?.id;
+      const entries = JSON.parse(localStorage.getItem('journalEntries') || []);
+      const userEntries = entries.filter(entry => entry.userId === currentUserId);
+      
       const entriesContainer = document.getElementById('journalEntries');
-      const entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
-      entriesContainer.innerHTML = entries.map(entry => `<div class="journal-entry"><p>${entry.text}</p><small>${entry.date}</small></div>`).join('');
+      if (entriesContainer) {
+        entriesContainer.innerHTML = userEntries.map(entry => `
+          <div class="journal-entry">
+            <p>${entry.text}</p>
+            <small>${new Date(entry.date).toLocaleString()}</small>
+          </div>
+        `).join('');
+      }
     }
 
     handleFoodSubmit(event) {
       event.preventDefault();
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        window.location.href = 'signin.html';
+        return;
+      }
+
       const mealType = document.getElementById('mealType').value;
       const foodInput = document.getElementById('foodInput');
       const caloriesInput = document.getElementById('caloriesInput');
-      const foodItem = { name: foodInput.value, calories: caloriesInput.value, date: new Date().toLocaleString() };
+      
+      const foodItem = { 
+        name: foodInput.value, 
+        calories: caloriesInput.value, 
+        date: new Date().toLocaleString(),
+        userId: currentUser.id 
+      };
+
       let meals = JSON.parse(localStorage.getItem(`${mealType}Meals`) || '[]');
       meals.push(foodItem);
       localStorage.setItem(`${mealType}Meals`, JSON.stringify(meals));
@@ -76,20 +135,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     renderMeals() {
+      const currentUserId = JSON.parse(localStorage.getItem('currentUser'))?.id;
+      
       ['breakfast', 'lunch', 'dinner'].forEach(type => {
         const list = document.getElementById(`${type}List`);
-        const meals = JSON.parse(localStorage.getItem(`${type}Meals`) || '[]');
-        list.innerHTML = meals.map(meal => `<li>${meal.name} - ${meal.calories} calories<small>${meal.date}</small></li>`).join('');
+        if (list) {
+          const meals = JSON.parse(localStorage.getItem(`${type}Meals`) || []);
+          const userMeals = meals.filter(meal => meal.userId === currentUserId);
+          
+          list.innerHTML = userMeals.map(meal => `
+            <li>
+              ${meal.name} - ${meal.calories} calories
+              <small>${meal.date}</small>
+            </li>
+          `).join('');
+        }
       });
     }
 
     saveHealthMetrics() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        window.location.href = 'signin.html';
+        return;
+      }
+
       const metrics = {
         weight: document.getElementById('weightInput').value,
         steps: document.getElementById('stepsInput').value,
         sleep: document.getElementById('sleepInput').value,
-        date: new Date().toLocaleString()
+        date: new Date().toLocaleString(),
+        userId: currentUser.id
       };
+
       let metricHistory = JSON.parse(localStorage.getItem('healthMetrics') || '[]');
       metricHistory.push(metrics);
       localStorage.setItem('healthMetrics', JSON.stringify(metricHistory));
@@ -101,9 +179,17 @@ document.addEventListener("DOMContentLoaded", () => {
       this.renderMeals();
     }
 
-    initCharts() {}
-    initFoodTracking() {}
-    updateNutrientComparison() {}
+    initCharts() {
+      // Initialize your charts here
+    }
+
+    initFoodTracking() {
+      // Food tracking initialization
+    }
+
+    updateNutrientComparison() {
+      // Nutrient comparison logic
+    }
   }
 
   new WellnessTracker();
