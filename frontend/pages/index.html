@@ -11,14 +11,31 @@
 <body>
     <div class="container">
         <header>
-            <div class="auth-container">
-                <button id="signInBtn" class="auth-btn">Sign In</button>
-                <div id="profileContainer" class="hidden">
-                    <img id="profileIcon" src="assets/profile-icon.png" alt="Profile">
-                    <span id="usernameDisplay"></span>
+            <div class="header-content">
+                <h1>Wellness Tracker</h1>
+                <div class="auth-container">
+                    <button id="signInBtn" class="auth-btn">Sign In</button>
+                    <div id="profileContainer" class="hidden">
+                        <div class="profile-icon-container">
+                            <img id="profileIcon" src="assets/default-profile.png" alt="Profile">
+                            <div id="profileDropdown" class="profile-dropdown">
+                                <div class="profile-info">
+                                    <div class="profile-photo-sm">
+                                        <img id="dropdownProfilePhoto" src="assets/default-profile.png" alt="Profile Photo">
+                                    </div>
+                                    <div class="profile-details">
+                                        <h4 id="dropdownFullName"></h4>
+                                        <p id="dropdownEmail"></p>
+                                    </div>
+                                </div>
+                                <button id="settingsBtn" class="dropdown-btn">
+                                    <i class="fas fa-cog"></i> Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <h1>Wellness Tracker</h1>
             <nav>
                 <button id="journalBtn">Journal</button>
                 <button id="dietBtn">Diet Plan</button>

@@ -41,6 +41,15 @@ header {
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
+/* Header Layout */
+header {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 0;
+}
+
+
 header h1 {
     font-weight: 300;
     letter-spacing: 1px;
@@ -651,9 +660,235 @@ footer {
     gap: 8px;
 }
 
-#profileIcon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
+
+/* Profile Dropdown Styles */
+.profile-icon-container {
+    position: relative;
     cursor: pointer;
+}
+
+#profileIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4CAF50;
+}
+
+.profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 250px;
+    z-index: 100;
+    padding: 15px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-photo-sm img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-details h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.profile-details p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.dropdown-btn {
+    width: 100%;
+    padding: 8px;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.dropdown-btn:hover {
+    background: #e9e9e9;
+}
+
+.dropdown-btn i {
+    font-size: 14px;
+}
+
+/* Profile Page Styles */
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-photo-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+}
+
+#profilePhotoDisplay {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #4CAF50;
+}
+
+.upload-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.profile-details {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.profile-section {
+    margin-bottom: 30px;
+}
+
+.profile-section h3 {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.profile-field {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.profile-field label {
+    font-weight: bold;
+    color: #555;
+}
+
+.editable-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-btn {
+    background: none;
+    border: none;
+    color: #4CAF50;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.edit-btn:hover {
+    text-decoration: underline;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #4CAF50;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.auth-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Profile Icon Styles */
+.profile-icon-container {
+    position: relative;
+    cursor: pointer;
+}
+
+#profileIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4CAF50;
+    transition: transform 0.2s ease;
+}
+
+#profileIcon:hover {
+    transform: scale(1.05);
+}
+
+/* Dropdown Styles */
+.profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    width: 250px;
+    padding: 15px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.profile-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.hidden {
+    display: none !important;
 }

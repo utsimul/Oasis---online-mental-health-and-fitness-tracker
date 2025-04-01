@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
       this.initCharts();
       this.initFoodTracking();
       this.updateNutrientComparison();
+      this.profileDropdown = document.getElementById('profileDropdown');
+      this.settingsBtn = document.getElementById('settingsBtn');
     }
 
     initAuthUI() {
@@ -32,16 +34,38 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    initProfileDropdown() {
+      this.authElements.profileIcon.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.profileDropdown.classList.toggle('hidden');
+      });
+  
+      this.settingsBtn.addEventListener('click', () => {
+          window.location.href = 'profile.html';
+      });
+  
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+          if (!e.target.closest('.profile-icon-container')) {
+              this.profileDropdown.classList.add('hidden');
+          }
+      });
+    }
+
     showProfileIcon(user) {
       this.authElements.signInBtn.classList.add('hidden');
       this.authElements.profileContainer.classList.remove('hidden');
-      this.authElements.usernameDisplay.textContent = user.nickname || user.email.split('@')[0];
       
-      // Add profile dropdown functionality if needed
-      this.authElements.profileIcon.addEventListener('click', () => {
-        // Implement profile dropdown or logout here
-        console.log('Profile clicked', user);
-      });
+      // Set profile image
+      const profilePhoto = localStorage.getItem('profilePhoto') || 'assets/default-profile.png';
+      this.authElements.profileIcon.src = profilePhoto;
+      
+      // Set dropdown info
+      document.getElementById('dropdownFullName').textContent = user.fullname;
+      document.getElementById('dropdownEmail').textContent = user.email;
+      document.getElementById('dropdownProfilePhoto').src = profilePhoto;
+      
+      this.initProfileDropdown();
     }
 
     showSignInButton() {

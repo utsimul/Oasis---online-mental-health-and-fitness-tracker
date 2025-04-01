@@ -1,5 +1,11 @@
 class JournalHistory {
   constructor() {
+    this.currentUserId = JSON.parse(localStorage.getItem('currentUser'))?.id;
+    if (!this.currentUserId) {
+      window.location.href = 'signin.html';
+      return;
+    }
+    
     this.initDatePicker();
     this.initEventListeners();
     this.renderJournalEntriesForToday();

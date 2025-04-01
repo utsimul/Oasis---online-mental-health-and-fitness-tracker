@@ -9,7 +9,7 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 5001;
 const SECRET_KEY = process.env.SECRET_KEY;
-
+const JournalEntry = require('./models/JournalEntry');
 // Enhanced Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,6 +39,26 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/mern_databa
 .catch(err => {
   console.error('MongoDB connection error:', err);
   process.exit(1);
+});
+
+// Replace your current mongoose.connection.once('open') block with:
+mongoose.connection.once('open', async () => {
+  console.log('Mongoose connected to DB');
+  console.log('Database name:', mongoose.connection.name);
+  
+  try {
+    // Create indexes if they don't exist
+    await JournalEntry.init();
+    await User.init();
+    console.log('All indexes verified');
+    
+    // Alternatively, you can create indexes directly:
+    // await mongoose.connection.db.collection('journal_entries').createIndex({ userId: 1 });
+    // await mongoose.connection.db.collection('journal_entries').createIndex({ userId: 1, date: -1 });
+    // await mongoose.connection.db.collection('users').createIndex({ email: 1 }, { unique: true });
+  } catch (err) {
+    console.error('Index creation error:', err);
+  }
 });
 
 // MongoDB event listeners
@@ -290,3 +310,72 @@ app.listen(PORT, () => {
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`Database: ${mongoose.connection.host}/${mongoose.connection.name}`);
 });
+
+// Create journal entry
+app.post('/api/journal', verifyToken, async (req, res) => {
+  try {
+    const { text, mood, tags } = req.body;
+    const entry = new JournalEntry({
+      userId: req.user.userId,
+      text,
+      mood,
+      tags
+    });
+    await entry.save();
+    res.status(201).json(entry);
+  } catch (error) {
+    res.status(500).json({ message: 'Error saving journal entry' });
+  }
+});
+
+// Get journal entries for user
+app.get('/api/journal', verifyToken, async (req, res) => {
+  try {
+    const { date } = req.query;
+    let query = { userId: req.user.userId };
+    
+    if (date) {
+      const startDate = new Date(date);
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 1);
+      
+      query.date = {
+        $gte: startDate,
+        $lt: endDate
+      };
+    }
+    
+    const entries = await JournalEntry.find(query).sort({ date: -1 });
+    res.json(entries);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching journal entries' });
+  }
+});
+
+// Update journal entry
+app.put('/api/journal/:id', verifyToken, async (req, res) => {
+  try {
+    const entry = await JournalEntry.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user.userId },
+      { text: req.body.text, mood: req.body.mood, tags: req.body.tags },
+      { new: true }
+    );
+    res.json(entry);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating journal entry' });
+  }
+});
+
+// Delete journal entry
+app.delete('/api/journal/:id', verifyToken, async (req, res) => {
+  try {
+    await JournalEntry.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.userId
+    });
+    res.json({ message: 'Entry deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting journal entry' });
+  }
+});
+
