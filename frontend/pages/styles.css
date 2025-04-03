@@ -892,3 +892,25 @@ footer {
 .hidden {
     display: none !important;
 }
+
+.form-group {
+    margin-bottom: 1rem;
+}
+.mood-options {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+.mood-options input[type="radio"] {
+    display: none;
+}
+.mood-options label {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.mood-options input[type="radio"]:checked + label {
+    background-color: #4CAF50;
+    color: white;
+}

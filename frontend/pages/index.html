@@ -48,7 +48,31 @@
             <section id="journalSection" class="active-section">
                 <h2>Personal Journal</h2>
                 <form id="journalForm">
-                    <textarea id="journalInput" placeholder="Write your thoughts..."></textarea>
+                    <div class="form-group">
+                        <label for="journalInput">How are you feeling today?</label>
+                        <textarea id="journalInput" name="text" placeholder="Write your thoughts..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Select your mood:</label>
+                        <div class="mood-options">
+                            <input type="radio" id="mood-happy" name="mood" value="happy" required>
+                            <label for="mood-happy">😊 Happy</label>
+                            
+                            <input type="radio" id="mood-neutral" name="mood" value="neutral">
+                            <label for="mood-neutral">😐 Neutral</label>
+                            
+                            <input type="radio" id="mood-sad" name="mood" value="sad">
+                            <label for="mood-sad">😢 Sad</label>
+                            
+                            <input type="radio" id="mood-angry" name="mood" value="angry">
+                            <label for="mood-angry">😠 Angry</label>
+                            
+                            <input type="radio" id="mood-anxious" name="mood" value="anxious">
+                            <label for="mood-anxious">😰 Anxious</label>
+                        </div>
+                    </div>
+            
                     <div class="journal-actions">
                         <button type="submit">Save Entry</button>
                         <button type="button" id="viewJournalHistoryBtn">View Journal History</button>
